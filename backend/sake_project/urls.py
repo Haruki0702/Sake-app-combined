@@ -27,6 +27,10 @@ urlpatterns = [
     path("events/", include("sake_event_scraping.urls")),
     path("ranking/", include("sake_ranking.urls")),
     path("api/sakes/", api_views.SakeListAPI.as_view()),
+    path("auth/", include("djoser.urls")),
+    path("auth/", include("djoser.urls.jwt")),
+    path("web_ranking/", include("sake_ranking.urls")), 
 ]
+
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

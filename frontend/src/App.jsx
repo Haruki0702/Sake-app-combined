@@ -1,43 +1,33 @@
-import { useState, useEffect } from 'react'
-// 作ったCSSをインポート (styles という変数に格納される)
-import styles from './SakeList.module.css'
-
+import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import Header from './Header' // これが読み込まれているか重要！
+import SakeList from './SakeList'
+import SakeDetail from './SakeDetail'
+import Login from './Login'
+import SakeForm from './SakeForm'
+import SignUp from './SignUp'
+import Profile from './Profile'
+import EventList from './EventList'
+import WebRanking from './WebRanking'
 function App() {
-  const [sakes, setSakes] = useState([])
-
-  // 画面が開かれた瞬間にDjangoへデータを取りに行く
-  useEffect(() => {
-    fetch('http://127.0.0.1:8000/api/sakes/')
-      .then(res => res.json())
-      .then(data => setSakes(data))
-      .catch(err => console.error(err))
-  }, [])
-
   return (
-    <div className={styles.container}>
-      <h1>🍶 日本酒リスト (React版)</h1>
+    <BrowserRouter>
+      {/* ↓↓↓ ヘッダーコンポーネントがここにあるか確認 ↓↓↓ */}
+      <Header />
       
-      {sakes.map(sake => (
-        <div key={sake.id} className={styles.card}>
-          {/* 画像がある場合のみ表示 (DjangoのURLを補完) */}
-          {sake.image && (
-            <img 
-              src={`http://127.0.0.1:8000${sake.image}`} 
-              alt={sake.title} 
-              className={styles.image}
-            />
-          )}
-          
-          <div className={styles.content}>
-            <h2 className={styles.title}>{sake.title}</h2>
-            <p className={styles.brewery}>
-              蔵元: {sake.brewery} | 評価: {'★'.repeat(sake.score)}
-            </p>
-            <p>甘味: {sake.sweetness} / 酸味: {sake.acidity}</p>
-          </div>
-        </div>
-      ))}
-    </div>
+      <div style={{ maxWidth: '1000px', margin: '0 auto', padding: '0 20px' }}>
+        <Routes>
+          <Route path="/" element={<SakeList />} />
+          <Route path="/sakes/:id" element={<SakeDetail />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/create" element={<SakeForm />} />
+          <Route path="/edit/:id" element={<SakeForm />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/profile/:username" element={<Profile />} />
+          <Route path="/events" element={<EventList />} />
+          <Route path="/web_ranking" element={<WebRanking />} />
+        </Routes>
+      </div>
+    </BrowserRouter>
   )
 }
 
