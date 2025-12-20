@@ -1,0 +1,19 @@
+{% extends 'sake_note/base.html' %}
+
+{% block content %}
+<div style="max-width: 400px; margin: 0 auto; padding: 20px; border: 1px solid #ccc; border-radius: 8px;">
+    <h2>🔐 ログイン</h2>
+    
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        
+        <button type="submit" class="btn" style="background: #007bff; color: white; width: 100%;">ログイン</button>
+    </form>
+    <hr>
+    <p style="text-align: center;">
+        アカウントをお持ちでない方は<br>
+        <a href="{% url 'signup' %}">新規登録はこちら</a>
+    </p>
+</div>
+{% endblock %}

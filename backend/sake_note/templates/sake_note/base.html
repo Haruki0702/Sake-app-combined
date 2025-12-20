@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>日本酒ノート</title>
+    <style>
+        body { max-width: 800px; margin: 0 auto; padding: 20px; font-family: sans-serif; }
+        header { border-bottom: 2px solid #333; margin-bottom: 20px; padding-bottom: 10px; }
+        a { text-decoration: none; color: #007bff; }
+        .btn { padding: 5px 10px; background: #eee; border: 1px solid #ccc; border-radius: 4px; }
+    </style>
+</head>
+<body>
+
+<header>
+        <h1><a href="{% url 'index' %}" style="color: #000;">🍶 日本酒ノート</a></h1>
+        <nav style="display: flex; gap: 15px; align-items: center;">
+            <a href="{% url 'index' %}">投稿一覧</a>
+            <a href="{% url 'event_list' %}">イベント</a>
+            <a href="{% url 'sake_ranking' %}">ランキング</a>
+            
+            {% if user.is_authenticated %}
+                <a href="{% url 'sake_create' %}">新規投稿</a>
+                <a href="{% url 'profile' user.username %}">👤 {{ user.username }}</a>
+                
+                <form action="{% url 'logout' %}" method="post" style="display:inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn" style="font-size: 0.8em;">ログアウト</button>
+                </form>
+
+            {% else %}
+                <a href="{% url 'login' %}" class="btn" style="background: #28a745; color: white;">ログイン</a>
+            {% endif %}
+            </nav>
+    </header>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <footer style="margin-top: 50px; color: #888; font-size: 0.8em;">
+       
+    </footer>
+
+</body>
+</html>

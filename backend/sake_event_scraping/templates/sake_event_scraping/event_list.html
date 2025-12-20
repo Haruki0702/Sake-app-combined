@@ -1,0 +1,28 @@
+{% extends 'sake_note/base.html' %}
+
+{% block content %}
+<h2>📅 おすすめ日本酒イベント情報</h2>
+<p><small>出典: <a href="https://nihonshucalendar.com/" target="_blank">日本酒カレンダー</a></small></p>
+
+{% if events %}
+    <div style="display: flex; flex-direction: column; gap: 15px;">
+        {% for event in events %}
+            <div style="border: 1px solid #ddd; padding: 15px; border-radius: 8px; background: #fff;">
+                <div style="font-size: 0.9em; color: #666;">{{ event.date }} | 📍 {{ event.place }}</div>
+                
+                <h3 style="margin: 5px 0;">
+                    <a href="{{ event.link }}" target="_blank" style="color: #007bff;">
+                        {{ event.title }}
+                    </a>
+                </h3>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>現在情報を取得できないか、イベントがありません。</p>
+{% endif %}
+
+<br>
+<a href="{% url 'index' %}" class="btn">トップに戻る</a>
+
+{% endblock %}

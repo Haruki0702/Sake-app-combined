@@ -1,0 +1,13 @@
+# macOS
+.DS_Store
+
+# Python / Django (Backend)
+backend/venv/
+backend/__pycache__/
+backend/*.sqlite3
+backend/.env
+
+# Node.js / React (Frontend)
+frontend/node_modules/
+frontend/dist/
+frontend/.env

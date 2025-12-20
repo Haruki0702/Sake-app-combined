@@ -1,0 +1,28 @@
+{% extends 'sake_note/base.html' %}
+
+{% block content %}
+<h2>日本酒ランキング</h2>
+<p><small>出典: <a href="https://www.saketime.jp/ranking/" target="_blank">日本酒ランキング</a></small></p>
+
+{% if ranking %}
+    <div style="display: flex; flex-direction: column; gap: 15px;">
+        {% for item in ranking %}
+            <div style="border: 1px solid #ddd; padding: 15px; border-radius: 8px; background: #fff;">
+                <div style="font-size: 0.9em; color: #666;"> 📍 {{ item.brand_info }}</div>
+
+                <h3 style="margin: 5px 0;">
+                    <a href="{{ item.link }}" target="_blank" style="color: #007bff;">
+                        {{ item.title }}
+                    </a>
+                </h3>
+            </div>
+        {% endfor %}
+    </div>
+{% else %}
+    <p>データが取得できませんでした。</p>
+{% endif %}
+
+<br>
+<a href="{% url 'index' %}" class="btn">トップに戻る</a>
+
+{% endblock %}

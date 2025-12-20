@@ -1,0 +1,44 @@
+/* デザインはここで一元管理！ */
+.container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: sans-serif;
+}
+
+.card {
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+  display: flex;
+  gap: 20px;
+  background-color: #fff;
+  transition: transform 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.image {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.content {
+  flex: 1;
+}
+
+.title {
+  margin: 0 0 5px 0;
+  color: #333;
+}
+
+.brewery {
+  color: #666;
+  font-size: 0.9em;
+}

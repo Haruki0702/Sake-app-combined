@@ -1,0 +1,35 @@
+{% extends "sake_note/base.html" %}
+{% block content %}
+    <h2>記録一覧</h2>
+    {% if sake_list %}
+        {% for sake in sake_list %}
+            <div style="border: 1px solid #ccc; padding: 10px; margin-bottom: 10px; border-radius: 4px;">
+                <h3>銘柄：{{ sake.title }}</h3>
+                <h4>ユーザー：{{ sake.user.username }}</h4>
+                <p>
+                    <b>酒蔵:</b>{{sake.brewery}}<br>
+                    <b>日付:</b>{{sake.tasting_date}}<br>
+                </p>
+                <div>
+                    {% if sake.image %}
+                        <p>アップロード画像</p>
+                        <img src="{{ sake.image.url }}" style="max-width: 100%; height: auto; max-height: 300px;">
+                    {% endif %}
+                </div>
+
+                <p>
+                    <b>感想:</b>{{sake.memo|linebreaksbr}}<br>
+                    <b>評価:</b>{{sake.score}}/5<br>
+                </p>
+                {% if request.user == sake.user %}
+                    <div style="margin-top: 10px;">
+                        <a href="{% url 'update' sake.pk %}" class="btn">編集</a>
+                        <a href="{% url 'delete' sake.pk %}" class="btn" style="background: #dc3545; color: white;">削除</a>
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>まだ記録がありません。</p>
+    {% endif %}
+{% endblock %}

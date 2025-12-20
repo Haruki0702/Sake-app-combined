@@ -1,0 +1,79 @@
+{% extends 'sake_note/base.html' %}
+
+{% block content %}
+<div style="text-align: center; margin-bottom: 30px;">
+    <h2>👤 {{ target_user.username }} さんの日本酒傾向</h2>
+    <p>記録数: {{ sake_list.count }} 件</p>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; gap: 40px; justify-content: center;">
+    
+    <div style="flex: 1; min-width: 300px; max-width: 500px;">
+        <canvas id="tasteRadarChart"></canvas>
+    </div>
+
+    <div style="flex: 1; min-width: 300px;">
+        <h3>最近の記録</h3>
+        <ul>
+            {% for sake in sake_list|slice:":5" %}
+                <li>
+                    <a href="{% url 'update' sake.id %}">{{ sake.title }}</a>
+                    <span style="color: gold;">{{ sake.get_score_display }}</span>
+                    <small>({{ sake.tasting_date }})</small>
+                </li>
+            {% empty %}
+                <li>まだ記録がありません</li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+    // Djangoから渡されたデータをJSの変数に入れる
+    const radarData = {
+        labels: ['甘味', '酸味', '後味', '香り', '旨み'],
+        datasets: [{
+            label: '平均的な好み',
+            data: [
+                {{ radar_data.sweetness }},
+                {{ radar_data.acidity }},
+                {{ radar_data.aftertaste }},
+                {{ radar_data.aroma }},
+                {{ radar_data.umami }}
+            ],
+            backgroundColor: 'rgba(54, 162, 235, 0.2)', // グラフの中の色
+            borderColor: 'rgba(54, 162, 235, 1)',     // 線の色
+            borderWidth: 2
+        }]
+    };
+
+    const config = {
+        type: 'radar', // レーダーチャートを指定
+        data: radarData,
+        options: {
+            scales: {
+                r: {
+                    min: 0,
+                    max: 5, // 5段階評価なのでMAX5
+                    ticks: { stepSize: 1 },
+                    pointLabels: {
+                        font: { size: 14 }
+                    }
+                }
+            }
+        }
+    };
+
+    // グラフを描画
+    new Chart(
+        document.getElementById('tasteRadarChart'),
+        config
+    );
+</script>
+
+<div style="text-align: center; margin-top: 30px;">
+    <a href="{% url 'index' %}" class="btn">トップに戻る</a>
+</div>
+{% endblock %}

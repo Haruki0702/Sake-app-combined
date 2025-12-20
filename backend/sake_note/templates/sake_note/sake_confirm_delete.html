@@ -1,0 +1,16 @@
+{% extends 'sake_note/base.html' %}
+
+{% block content %}
+    <div style="border: 2px solid #dc3545; padding: 20px; border-radius: 8px;">
+        <h2>本当に削除しますか？</h2>
+        <p>以下のデータを完全に削除します。この操作は取り消せません。</p>
+        
+        <h3>{{ object.title }} （{{ object.tasting_date }}）</h3>
+        
+        <form method="post">
+            {% csrf_token %}
+            <button type="submit" class="btn" style="background: #dc3545; color: white;">削除する</button>
+            <a href="{% url 'index' %}" class="btn">やめる</a>
+        </form>
+    </div>
+{% endblock %}

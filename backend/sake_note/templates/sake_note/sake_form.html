@@ -1,0 +1,17 @@
+{% extends 'sake_note/base.html' %}
+
+{% block content %}
+    <h2>お酒を記録</h2>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        
+        <table>
+            {{ form.as_table }}
+        </table>
+
+        <br>
+        <button type="submit" class="btn" style="background: #007bff; color: white;">保存する</button>
+        <a href="{% url 'index' %}" class="btn">キャンセル</a>
+    </form>
+{% endblock %}
