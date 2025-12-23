@@ -76,10 +76,13 @@ function SakeDetail() {
 
       {/* 詳細データ */}
       <div style={{ padding: '20px', background: '#f8f9fa', borderRadius: '8px' }}>
-        <p><strong>評価:</strong> {'★'.repeat(sake.score)}</p>
+        <p><strong>銘柄:</strong>{sake.title}</p>
+        <p><strong>蔵元:</strong>{sake.brewery}</p>
+        <p><strong>都道府県:</strong> {sake.prefecture}</p>
         <p><strong>日付:</strong> {sake.tasting_date}</p>
-        <hr style={{ margin: '15px 0', border: 'none', borderTop: '1px solid #ddd' }} />
         
+        <hr style={{ margin: '15px 0', border: 'none', borderTop: '1px solid #ddd' }} />
+        <p><strong>総合評価:</strong> {'★'.repeat(sake.score)}({sake.score}/5)</p>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
             <div>甘味: {sake.sweetness}</div>
             <div>酸味: {sake.acidity}</div>

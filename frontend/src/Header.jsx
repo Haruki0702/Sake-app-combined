@@ -56,6 +56,7 @@ function Header() {
             <Link to={`/profile/${username}`} style={{ marginLeft: '15px', textDecoration: 'none', color: '#333', fontWeight: 'bold' }}>
                 👤 {username}
             </Link>
+            <Link to="/sake_map" style={{ ...btnStyle, color: '#e91e63' }}>🗺 制覇マップ</Link>
 
             <button onClick={handleLogout} style={{ ...btnStyle, background: '#6c757d', color: 'white', border: 'none', cursor: 'pointer' }}>🚪 ログアウト</button>
           </>

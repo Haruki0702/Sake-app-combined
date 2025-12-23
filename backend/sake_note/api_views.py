@@ -1,13 +1,14 @@
 from rest_framework import generics
 from .models import Sake
 from .serializers import SakeSerializer
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
 from rest_framework.response import Response
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.models import User
 from .services import calculate_taste_profile
 from rest_framework import permissions
 from .permission import IsOwnerOrReadOnly
+from django.db.models import Count
 
 class SakeListAPI(generics.ListCreateAPIView):
     queryset = Sake.objects.all().order_by("created_at")
@@ -34,4 +35,15 @@ def user_profile_api(request, username):
         "sake_count": sakes.count(),
         "sakes": serializer.data,
     })
-    
+
+@api_view(['GET'])
+@permission_classes([permissions.IsAuthenticated])
+def sake_map_api(request):
+    data=Sake.objects.filter(user=request.user).values("prefecture").annotate(count=Count("id"))
+    response_data={}
+    for item in data:
+        pref_nam=item["prefecture"]
+        count=item["count"]
+        if pref_nam:
+            response_data[pref_nam]=count
+    return Response(response_data)
