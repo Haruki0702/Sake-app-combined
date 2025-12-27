@@ -11,6 +11,7 @@ import {
   Legend,
 } from 'chart.js'
 import { Radar } from 'react-chartjs-2'
+import SakeMap from './SakeMap'
 
 // Chart.jsを使うための準備（おまじない）
 ChartJS.register(
@@ -25,13 +26,62 @@ ChartJS.register(
 function Profile() {
   const { username } = useParams()
   const [profileData, setProfileData] = useState(null)
+  const [following, setFollowing] = useState([])
+  const [followers, setFollowers] = useState([])
+  const [isFollowing, setIsFollowing] = useState(false)
 
   useEffect(() => {
+    // プロフィール情報取得
     fetch(`http://127.0.0.1:8000/api/profile/${username}/`)
       .then(res => res.json())
       .then(data => setProfileData(data))
       .catch(err => console.error(err))
+
+    // フォロー情報取得
+    const token = localStorage.getItem('access_token')
+    if (token) {
+      fetch(`http://127.0.0.1:8000/api/users/${username}/following/`, {
+        headers: { 'Authorization': `JWT ${token}` }
+      })
+        .then(res => res.json())
+        .then(data => setFollowing(data))
+        .catch(err => console.error(err))
+
+      fetch(`http://127.0.0.1:8000/api/users/${username}/followers/`, {
+        headers: { 'Authorization': `JWT ${token}` }
+      })
+        .then(res => res.json())
+        .then(data => setFollowers(data))
+        .catch(err => console.error(err))
+    }
   }, [username])
+
+  const handleFollow = async () => {
+    const token = localStorage.getItem('access_token')
+    if (!token) return
+
+    try {
+      const response = await fetch(`http://127.0.0.1:8000/api/users/${profileData.username}/follow/`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `JWT ${token}`
+        }
+      })
+
+      if (response.ok) {
+        setIsFollowing(!isFollowing)
+        // フォロワー数を更新
+        if (isFollowing) {
+          setFollowers(followers.filter(f => f.username !== localStorage.getItem('username')))
+        } else {
+          // 自分をフォロワーに追加（実際のAPIレスポンスに基づいて調整が必要）
+          setFollowers([...followers, { username: localStorage.getItem('username') }])
+        }
+      }
+    } catch (err) {
+      console.error("フォローエラー:", err)
+    }
+  }
 
   if (!profileData) return <div style={{textAlign:'center', marginTop:'50px'}}>読み込み中...</div>
 
@@ -75,6 +125,26 @@ function Profile() {
       <div style={{ textAlign: 'center', marginBottom: '40px' }}>
         <h1 style={{ fontSize: '2em', marginBottom: '10px' }}>👤 {profileData.username}</h1>
         <p style={{ color: '#666' }}>記録数: {profileData.sake_count} 件</p>
+        <div style={{ marginTop: '15px' }}>
+          <span style={{ marginRight: '20px' }}>フォロー中: {following.length}</span>
+          <span>フォロワー: {followers.length}</span>
+        </div>
+        {localStorage.getItem('access_token') && (
+          <button
+            onClick={handleFollow}
+            style={{
+              marginTop: '15px',
+              padding: '8px 16px',
+              background: isFollowing ? '#6c757d' : '#007bff',
+              color: 'white',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer'
+            }}
+          >
+            {isFollowing ? 'フォロー解除' : 'フォロー'}
+          </button>
+        )}
       </div>
 
       <div style={{ display: 'flex', flexWrap: 'wrap', gap: '50px', justifyContent: 'center' }}>
@@ -114,8 +184,41 @@ function Profile() {
                     ))
                 )}
             </div>
+
+            {/* フォロー中のユーザー */}
+            <h3 style={{ borderBottom: '2px solid #eee', paddingBottom: '10px', marginTop: '30px' }}>👥 フォロー中</h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '15px' }}>
+                {following.length === 0 ? (
+                    <p>フォロー中のユーザーがいません。</p>
+                ) : (
+                    following.map(user => (
+                        <Link key={user.id} to={`/profile/${user.username}`} style={{ textDecoration: 'none', color: '#007bff' }}>
+                            {user.username}
+                        </Link>
+                    ))
+                )}
+            </div>
+
+            {/* フォロワー */}
+            <h3 style={{ borderBottom: '2px solid #eee', paddingBottom: '10px', marginTop: '30px' }}>👤 フォロワー</h3>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginTop: '15px' }}>
+                {followers.length === 0 ? (
+                    <p>フォロワーがいません。</p>
+                ) : (
+                    followers.map(user => (
+                        <Link key={user.id} to={`/profile/${user.username}`} style={{ textDecoration: 'none', color: '#007bff' }}>
+                            {user.username}
+                        </Link>
+                    ))
+                )}
+            </div>
         </div>
 
+      </div>
+
+      {/* 日本酒制覇マップ */}
+      <div style={{ marginTop: '50px' }}>
+        <SakeMap username={username} />
       </div>
     </div>
   )

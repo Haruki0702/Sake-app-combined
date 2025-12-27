@@ -4,7 +4,7 @@ from .models import Sake
 class SakeForm(forms.ModelForm):
     class Meta:
         model = Sake
-        fields = ['title', 'brewery', 'score', 'tasting_date', 'image',  'memo', 'sweetness', 'acidity', 'umami', 'aroma', 'aftertaste']
+        fields = ['title', 'brewery', 'score', 'tasting_date', 'image',  'memo', "prefecture", 'sweetness', 'acidity', 'umami', 'aroma', 'aftertaste']
         widgets={
             "tasting_date": forms.NumberInput(attrs={"type":"date"}),
             "sweetness": forms.NumberInput(attrs={"min":1, "max":5}),

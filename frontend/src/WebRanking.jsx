@@ -7,10 +7,30 @@ function WebRanking() {
   useEffect(() => {
     // Djangoで作った新しいAPIを叩く
     fetch('http://127.0.0.1:8000/web_ranking/api/')
-      .then(res => res.json())
+      .then(res => {
+        if (res.status === 202) {
+          // データ取得中の場合、少し待ってから再試行
+          setTimeout(() => {
+            fetch('http://127.0.0.1:8000/web_ranking/api/')
+              .then(res => res.json())
+              .then(data => {
+                setRankings(data)
+                setLoading(false)
+              })
+              .catch(err => {
+                console.error("取得エラー:", err)
+                setLoading(false)
+              })
+          }, 2000) // 2秒待機
+        } else {
+          return res.json()
+        }
+      })
       .then(data => {
-        setRankings(data)
-        setLoading(false)
+        if (data) {
+          setRankings(data)
+          setLoading(false)
+        }
       })
       .catch(err => {
         console.error("取得エラー:", err)

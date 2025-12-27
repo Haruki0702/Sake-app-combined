@@ -10,7 +10,7 @@ def get_sake_ranking(page_url):
     }
 
     try:
-        response = requests.get(page_url, headers=headers, timeout=10)
+        response = requests.get(page_url, headers=headers, timeout=5)
         response.encoding = response.apparent_encoding
         soup = BeautifulSoup(response.text, "html.parser")
 

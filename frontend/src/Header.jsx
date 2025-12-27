@@ -39,31 +39,31 @@ function Header() {
   }
 
   return (
-    <header style={{ /* ...以前と同じ... */ background: '#fff', borderBottom: '1px solid #ddd', padding: '15px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+    <header style={{ /* ...以前と同じ... */ background: '#d74a4aff', borderBottom: '1px solid #ddd', padding: '15px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
       <h1 style={{ margin: 0, fontSize: '1.5em' }}>
-        <Link to="/" style={{ textDecoration: 'none', color: '#333' }}>🍶 日本酒ノート</Link>
+        <Link to="/" style={{ textDecoration: 'none', color: '#fff' }}>日本酒ノート</Link>
       </h1>
 
       <nav style={{ display: 'flex', alignItems: 'center' }}>
-        <Link to="/events" style={{ ...btnStyle, color: '#555' }}>📅 イベント</Link>
-        <Link to="/web_ranking" style={{ ...btnStyle, color: '#e91e63' }}>🌎 世間の評価</Link>
+        <Link to="/events" style={{ ...btnStyle, color: '#fff' }}>イベント</Link>
+        <Link to="/web_ranking" style={{ ...btnStyle, color: '#fff' }}>世間の評価</Link>
+        <Link to="/users" style={{ ...btnStyle, color: '#fff' }}>ユーザー</Link>
 
         {isLoggedIn ? (
           <>
-            <Link to="/create" style={{ ...btnStyle, background: '#007bff', color: 'white' }}>🖊 新規投稿</Link>
-            
-            {/* ↓↓ ユーザー名の表示リンク ↓↓ */}
-            <Link to={`/profile/${username}`} style={{ marginLeft: '15px', textDecoration: 'none', color: '#333', fontWeight: 'bold' }}>
-                👤 {username}
+            <Link to={`/profile/${username}`} style={{ marginLeft: '15px', textDecoration: 'none', color: '#ffffffff', fontWeight: 'bold' }}>
+                {username}
             </Link>
+            <Link to="/create" style={{ ...btnStyle, background: '#007bff', color: 'white' }}>投稿</Link>
+            
 
             <button onClick={handleLogout} style={{ ...btnStyle, background: '#6c757d', color: 'white', border: 'none', cursor: 'pointer' }}>🚪 ログアウト</button>
           </>
         ) : (
           <>
-            <Link to="/login" style={{ ...btnStyle, background: '#28a745', color: 'white' }}>🔐 ログイン</Link>
+            <Link to="/login" style={{ ...btnStyle, background: '#28a745', color: 'white' }}>ログイン</Link>
             {/* ↓↓ 新規登録へのリンク ↓↓ */}
-            <Link to="/signup" style={{ ...btnStyle, background: '#17a2b8', color: 'white' }}>📝 登録</Link>
+            <Link to="/signup" style={{ ...btnStyle, background: '#17a2b8', color: 'white' }}>登録</Link>
           </>
         )}
       </nav>

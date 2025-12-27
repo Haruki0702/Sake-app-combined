@@ -23,14 +23,26 @@ def ranking_list_api(request):
     ranking = cache.get("sake_ranking")
     
     if not ranking:
-        print("キャッシュなし。Webからスクレイピング実行...")
-        # スクレイピング実行
-        ranking = get_sake_ranking("https://www.saketime.jp/ranking/")
+        # スクレイピング実行中のロックを確認
+        if cache.get("sake_ranking_lock"):
+            # 他のプロセスが実行中なので、待機メッセージを返す
+            return Response({"message": "ランキングデータ取得中です。しばらくお待ちください。"}, status=202)
         
-        # 2. キャッシュに保存 (60分 = 3600秒)
-        # データが取れなかった場合(空リスト)はキャッシュしない方が安全
-        if ranking:
-            cache.set("sake_ranking", ranking, 60 * 60)
+        # ロックを設定
+        cache.set("sake_ranking_lock", True, 300)  # 5分間ロック
+        
+        try:
+            print("キャッシュなし。Webからスクレイピング実行...")
+            # スクレイピング実行
+            ranking = get_sake_ranking("https://www.saketime.jp/ranking/")
+            
+            # 2. キャッシュに保存 (6時間 = 21600秒)
+            # データが取れなかった場合(空リスト)はキャッシュしない方が安全
+            if ranking:
+                cache.set("sake_ranking", ranking, 6 * 60 * 60)
+        finally:
+            # ロック解除
+            cache.delete("sake_ranking_lock")
     else:
         print("キャッシュから高速読み込み")
 
