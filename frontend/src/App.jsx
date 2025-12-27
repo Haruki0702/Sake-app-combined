@@ -9,6 +9,7 @@ import Profile from './Profile'
 import EventList from './EventList'
 import WebRanking from './WebRanking'
 import SakeMap from './SakeMap'
+import UserList from './UserList'
 
 function App() {
   return (
@@ -28,6 +29,7 @@ function App() {
           <Route path="/events" element={<EventList />} />
           <Route path="/web_ranking" element={<WebRanking />} />
           <Route path="/sake_map" element={<SakeMap />}/>
+          <Route path="/users" element={<UserList />}/>
         </Routes>
       </div>
     </BrowserRouter>

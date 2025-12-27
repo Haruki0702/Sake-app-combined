@@ -22,10 +22,22 @@ function SakeMap() {
   }, [])
 
   const getColor = (count) => {
-    if (count >= 10) return "#800000"
-    if (count >= 5)  return "#cc0000"
-    if (count >= 1)  return "#ff9999"
-    return "#eee"
+    if (count === 0) return "#f5f5f5"  // 非常に薄い灰色
+    if (count === 1) return "#ffe6e6"  // 非常に薄い赤
+    if (count === 2) return "#ffcccc"  // 薄い赤
+    if (count === 3) return "#ffaaaa"  // 中薄い赤
+    if (count === 4) return "#ff8888"  // 中赤
+    if (count === 5) return "#ff6666"  // やや濃い赤
+    if (count === 6) return "#ff4444"  // 濃い赤
+    if (count === 7) return "#ff2222"  // より濃い赤
+    if (count === 8) return "#ff0000"  // 鮮やかな赤
+    if (count === 9) return "#dd0000"  // 暗い赤
+    if (count === 10) return "#bb0000" // より暗い赤
+    if (count === 11) return "#990000" // さらに暗い赤
+    if (count === 12) return "#770000" // 濃い赤
+    if (count === 13) return "#550000" // 非常に濃い赤
+    if (count === 14) return "#330000" // ほぼ黒に近い赤
+    return "#110000" // 15本以上: 最も濃い赤
   }
 
   if (loading) return <div>読み込み中...</div>

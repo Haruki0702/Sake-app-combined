@@ -65,7 +65,7 @@ function SakeDetail() {
       </div>
       
       <h1>{sake.title} <small style={{ fontSize: '0.6em', color: '#666' }}>({sake.brewery})</small></h1>
-      <p style={{ color: '#555' }}>👤 投稿者: {sake.user}</p>
+      <p style={{ color: '#555' }}>投稿者<Link to={`/profile/${sake.user}`}>{sake.user}</Link></p>
       {sake.image && (
         <img 
           src={sake.image.startsWith('http') ? sake.image : `http://127.0.0.1:8000${sake.image}`} 

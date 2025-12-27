@@ -3,6 +3,14 @@ from django.contrib.auth.models import User
 from django.core.validators import MinValueValidator, MaxValueValidator
 from .prefectures import Prefectures
 
+# Userモデルにフォロー機能を追加
+User.add_to_class('following', models.ManyToManyField(
+    'self',
+    symmetrical=False,
+    related_name='followers',
+    blank=True
+))
+
 class Sake(models.Model):
     SCORE_CHOICES=[
         (1, "*"),

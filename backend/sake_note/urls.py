@@ -13,4 +13,9 @@ urlpatterns = [
     path("api/sakes/", api_views.SakeListAPI.as_view(), name="sake_list_api"),
     path("api/sakes/<int:pk>/", api_views.SakeDetailAPI.as_view(), name="sake_detail_api"),
     path("api/sake_map/", api_views.sake_map_api, name="sake_map_api"),
+    path("api/sakes/following/", api_views.FollowingSakesAPI.as_view(), name="following_sakes_api"),
+    path("api/users/", api_views.UserListAPI.as_view(), name="user_list_api"),
+    path("api/users/<int:user_id>/follow/", api_views.follow_user_api, name="follow_user_api"),
+    path("api/users/<str:username>/following/", api_views.following_list_api, name="following_list_api"),
+    path("api/users/<str:username>/followers/", api_views.followers_list_api, name="followers_list_api"),
 ]

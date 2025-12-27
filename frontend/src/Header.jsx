@@ -47,6 +47,7 @@ function Header() {
       <nav style={{ display: 'flex', alignItems: 'center' }}>
         <Link to="/events" style={{ ...btnStyle, color: '#555' }}>📅 イベント</Link>
         <Link to="/web_ranking" style={{ ...btnStyle, color: '#e91e63' }}>🌎 世間の評価</Link>
+        <Link to="/users" style={{ ...btnStyle, color: '#28a745' }}>👥 ユーザー</Link>
 
         {isLoggedIn ? (
           <>
