@@ -1,10 +1,12 @@
 import requests
 from bs4 import BeautifulSoup
+import time
 
 def get_sake_events(page_url):
     events = []
     try:
-        response = requests.get(page_url, timeout=10)
+        # タイムアウトを短く設定し、サーバー負荷を軽減
+        response = requests.get(page_url, timeout=5)
         response.encoding = response.apparent_encoding
         soup = BeautifulSoup(response.text, 'html.parser')
 
@@ -74,9 +76,21 @@ def get_sake_events(page_url):
 
 def all_events():
     all_events_list=[]
-    for i in range(16):
-        page_url="https://nihonshucalendar.com/coming_event_recommended.php?page="+str(i+1)
-        all_events_list.extend(get_sake_events(page_url))
+    # ページ数を8ページに制限（負荷軽減）
+    max_pages = 8
+    for i in range(max_pages):
+        try:
+            page_url="https://nihonshucalendar.com/coming_event_recommended.php?page="+str(i+1)
+            page_events = get_sake_events(page_url)
+            all_events_list.extend(page_events)
+            # サーバー負荷軽減のため、ページ間に少し待機
+            if i < max_pages - 1:  # 最後のページ以外
+                time.sleep(0.5)
+        except Exception as e:
+            print(f"ページ {i+1} の取得でエラー: {e}")
+            continue
+    
+    # 日付でソート
     sorted_events=sorted(all_events_list, key=lambda x: x['date'])
     return sorted_events
 

@@ -13,6 +13,7 @@ urlpatterns = [
     path("api/sakes/", api_views.SakeListAPI.as_view(), name="sake_list_api"),
     path("api/sakes/<int:pk>/", api_views.SakeDetailAPI.as_view(), name="sake_detail_api"),
     path("api/sake_map/", api_views.sake_map_api, name="sake_map_api"),
+    path("api/sake_map/<str:username>/", api_views.sake_map_api, name="user_sake_map_api"),
     path("api/sakes/following/", api_views.FollowingSakesAPI.as_view(), name="following_sakes_api"),
     path("api/users/", api_views.UserListAPI.as_view(), name="user_list_api"),
     path("api/users/<int:user_id>/follow/", api_views.follow_user_api, name="follow_user_api"),

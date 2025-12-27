@@ -18,8 +18,22 @@ def event_list(request):
 def event_list_api(request):
     events=cache.get("sake_events")
     if not events:
-        events=all_events()
-        cache.set("sake_events", events, 60*60)
+        # スクレイピング実行中のロックを確認
+        if cache.get("sake_events_lock"):
+            # 他のプロセスが実行中なので、キャッシュが空でも待機
+            return Response({"message": "データ取得中です。しばらくお待ちください。"}, status=202)
+        
+        # ロックを設定
+        cache.set("sake_events_lock", True, 300)  # 5分間ロック
+        
+        try:
+            events=all_events()
+            if events:
+                cache.set("sake_events", events, 6*60*60)  # 6時間キャッシュ
+        finally:
+            # ロック解除
+            cache.delete("sake_events_lock")
+    
     return Response(events)
 
 

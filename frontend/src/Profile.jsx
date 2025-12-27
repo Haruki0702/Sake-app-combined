@@ -11,6 +11,7 @@ import {
   Legend,
 } from 'chart.js'
 import { Radar } from 'react-chartjs-2'
+import SakeMap from './SakeMap'
 
 // Chart.jsを使うための準備（おまじない）
 ChartJS.register(
@@ -213,6 +214,11 @@ function Profile() {
             </div>
         </div>
 
+      </div>
+
+      {/* 日本酒制覇マップ */}
+      <div style={{ marginTop: '50px' }}>
+        <SakeMap username={username} />
       </div>
     </div>
   )

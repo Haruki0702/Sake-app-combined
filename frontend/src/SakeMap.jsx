@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-function SakeMap() {
+function SakeMap({ username }) {
   const [counts, setCounts] = useState({})
   const [loading, setLoading] = useState(true)
 
@@ -10,7 +10,13 @@ function SakeMap() {
         setLoading(false)
         return
     }
-    fetch('http://127.0.0.1:8000/api/sake_map/', {
+
+    // username が指定されている場合はそのユーザーのマップ、指定されていない場合は自分のマップ
+    const url = username 
+      ? `http://127.0.0.1:8000/api/sake_map/${username}/`
+      : 'http://127.0.0.1:8000/api/sake_map/'
+
+    fetch(url, {
         headers: { 'Authorization': `JWT ${token}` }
     })
       .then(res => res.json())
@@ -19,7 +25,7 @@ function SakeMap() {
         setLoading(false)
       })
       .catch(() => setLoading(false))
-  }, [])
+  }, [username])
 
   const getColor = (count) => {
     if (count === 0) return "#f5f5f5"  // 非常に薄い灰色

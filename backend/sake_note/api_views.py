@@ -11,7 +11,7 @@ from .permission import IsOwnerOrReadOnly
 from django.db.models import Count
 
 class SakeListAPI(generics.ListCreateAPIView):
-    queryset = Sake.objects.all().order_by("created_at")
+    queryset = Sake.objects.all().order_by("-created_at")
     serializer_class = SakeSerializer
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
 
@@ -38,14 +38,20 @@ def user_profile_api(request, username):
 
 @api_view(['GET'])
 @permission_classes([permissions.IsAuthenticated])
-def sake_map_api(request):
-    data=Sake.objects.filter(user=request.user).values("prefecture").annotate(count=Count("id"))
-    response_data={}
+def sake_map_api(request, username=None):
+    # username が指定されていない場合は自分のデータ
+    if username:
+        target_user = get_object_or_404(User, username=username)
+    else:
+        target_user = request.user
+
+    data = Sake.objects.filter(user=target_user).values("prefecture").annotate(count=Count("id"))
+    response_data = {}
     for item in data:
-        pref_nam=item["prefecture"]
-        count=item["count"]
-        if pref_nam:
-            response_data[pref_nam]=count
+        pref_name = item["prefecture"]
+        count = item["count"]
+        if pref_name:
+            response_data[pref_name] = count
     return Response(response_data)
 
 class FollowingSakesAPI(generics.ListAPIView):
